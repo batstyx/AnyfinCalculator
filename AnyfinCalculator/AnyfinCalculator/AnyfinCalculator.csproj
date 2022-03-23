@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AnyfinCalculator</RootNamespace>
     <AssemblyName>AnyfinCalculator</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -33,17 +33,30 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HearthDb, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Hearthstone-Deck-Tracker\lib\HearthDb.dll</HintPath>
+    <Reference Include="HearthDb">
+      <HintPath>..\..\lib\HearthDb.dll</HintPath>
     </Reference>
-    <Reference Include="HearthstoneDeckTracker, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Hearthstone-Deck-Tracker\Hearthstone Deck Tracker\bin\Debug\HearthstoneDeckTracker.exe</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>..\..\..\Hearthstone-Deck-Tracker\Hearthstone Deck Tracker\bin\Debug\MahApps.Metro.dll</HintPath>
+    <Reference Include="HearthstoneDeckTracker">
+      <HintPath>..\..\lib\HearthstoneDeckTracker.exe</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -80,7 +93,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro">
+      <Version>1.6.5</Version>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\anyfin_bg.png" />
     <Resource Include="Images\swamp.png" />
@@ -94,7 +111,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(ProjectDir)build.cmd" $(ConfigurationName) "$(ProjectDir)$(OutDir)$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" copy /Y "$(TargetPath)" "%25appdata%25\HearthstoneDeckTracker\Plugins\$(TargetName).dll"
+if "$(ConfigurationName)" == "Debug" copy /Y "$(TargetDir)$(TargetName).pdb" "%25appdata%25\HearthstoneDeckTracker\Plugins\$(TargetName).pdb"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
