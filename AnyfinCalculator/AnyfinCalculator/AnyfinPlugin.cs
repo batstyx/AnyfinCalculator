@@ -23,7 +23,7 @@ namespace AnyfinCalculator
 		private HearthstoneTextBlock _displayBlock;
 		private AnyfinDisplay _display;
 		//todo: this
-		private CardToolTip _toolTip;
+		//private CardToolTip _toolTip;
 		private StackPanel _toolTipsPanel;
 		private bool _inAnyfinGame;
 
@@ -33,7 +33,7 @@ namespace AnyfinCalculator
 			_calculator = new DamageCalculator();
 			ConfigHandler();
 			_display = new AnyfinDisplay(_config) { Visibility = Visibility.Collapsed };
-			_toolTip = new CardToolTip();
+			//_toolTip = new CardToolTip();
 			_toolTipsPanel = new StackPanel();
 
 			GameEvents.OnPlayerHandMouseOver.Add(OnMouseOver);
