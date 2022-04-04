@@ -117,7 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SetttingsTitle" xml:space="preserve">
+  <data name="DisplayResetButton" xml:space="preserve">
+    <value>Reset to Default</value>
+  </data>
+  <data name="DisplayTitle" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="LayoutTitle" xml:space="preserve">
+    <value>Layout</value>
+  </data>
+  <data name="MenuCalculate" xml:space="preserve">
+    <value>Calculate Board</value>
+  </data>
+  <data name="MenuSettings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="MenuTitle" xml:space="preserve">
+    <value>Anyfin Calculator</value>
+  </data>
+  <data name="PluginButton" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PluginDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PositionResetButton" xml:space="preserve">
+    <value>Reset to Default</value>
+  </data>
+  <data name="PositionTitle" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="SettingsHorizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="SettingsHorizontalTooltip" xml:space="preserve">
+    <value>% Screen Position (Left &lt;-&gt; Right)</value>
+  </data>
+  <data name="SettingsOpacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="SettingsScale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Anyfin Calculator Settings</value>
+  </data>
+  <data name="SettingsVertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="SettingsVerticalTooltip" xml:space="preserve">
+    <value>% Screen Position (Top &lt;-&gt; Bottom)</value>
   </data>
 </root>

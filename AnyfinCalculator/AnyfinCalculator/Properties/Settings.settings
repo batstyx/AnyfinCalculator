@@ -2,17 +2,23 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AnyfinCalculator.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Top" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Top" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">75</Value>
     </Setting>
-    <Setting Name="Left" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Left" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">75</Value>
     </Setting>
-    <Setting Name="Scale" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Scale" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="Opacity" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="Opacity" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="MaxLeft" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="MaxTop" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
     </Setting>
   </Settings>
 </SettingsFile>

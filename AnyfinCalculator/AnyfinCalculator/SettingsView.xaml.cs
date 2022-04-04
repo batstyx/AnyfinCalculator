@@ -30,5 +30,15 @@ namespace AnyfinCalculator
         {
             InitializeComponent();
         }
+
+        private void ButtonResetPosition_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonResetDisplay_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

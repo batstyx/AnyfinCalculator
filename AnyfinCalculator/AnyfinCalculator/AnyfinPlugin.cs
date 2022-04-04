@@ -15,6 +15,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Card = Hearthstone_Deck_Tracker.Hearthstone.Card;
 using Core = Hearthstone_Deck_Tracker.API.Core;
 using System.Threading.Tasks;
+using AnyfinCalculator.Properties;
 
 namespace AnyfinCalculator
 {
@@ -29,7 +30,7 @@ namespace AnyfinCalculator
 		private StackPanel _toolTipsPanel;
 		private bool _inAnyfinGame;
 
-		protected MenuItem mainMenuItem { get; set; }
+		protected MenuItem MainMenuItem { get; set; }
 
 		public void OnLoad()
 		{
@@ -41,9 +42,15 @@ namespace AnyfinCalculator
 			_toolTipsPanel = new StackPanel();
 
 			// Create main menu item
-			mainMenuItem = new MenuItem();
-			mainMenuItem.Header = "Calculate Board";
-			mainMenuItem.Click += new RoutedEventHandler(ForceUpdateClick);
+			MainMenuItem = new MenuItem {  Header = Strings.Get("MenuTitle") };
+			
+			var calcMenuItem = new MenuItem { Header = Strings.Get("MenuCalculate") };
+			calcMenuItem.Click += new RoutedEventHandler(ForceUpdateClick);
+			MainMenuItem.Items.Add(calcMenuItem);
+
+			var settingsMenuItem = new MenuItem { Header = Strings.Get("MenuSettings") };
+			settingsMenuItem.Click += (sender, args) => OnButtonPress();
+			MainMenuItem.Items.Add(settingsMenuItem);
 
 			GameEvents.OnPlayerHandMouseOver.Add(OnMouseOver);
 			GameEvents.OnMouseOverOff.Add(OnMouseOff);
@@ -102,8 +109,7 @@ namespace AnyfinCalculator
 
 		#endregion
 
-		public async void OnButtonPress()
-			=> await Core.MainWindow.ShowMessageAsync("Warning", "There is currently no options for this plugin.");
+		public void OnButtonPress() => SettingsView.Flyout.IsOpen = true;
 
 		public void OnUnload()
 		{
@@ -122,12 +128,12 @@ namespace AnyfinCalculator
 
 		public MenuItem MenuItem
 		{
-			get { return mainMenuItem; }
+			get { return MainMenuItem; }
 		}
 
-		public string ButtonText => "Options";
+		public string ButtonText => Strings.Get("PluginButton");
 		public string Author => "ericBG";
-		public Version Version => new Version(1, 0, 6);
+		public Version Version => LibraryInfo.Version;
 
 		private void ConfigHandler()
 		{

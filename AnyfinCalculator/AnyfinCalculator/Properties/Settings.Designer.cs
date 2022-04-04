@@ -25,10 +25,10 @@ namespace AnyfinCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Top {
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int Top {
             get {
-                return ((string)(this["Top"]));
+                return ((int)(this["Top"]));
             }
             set {
                 this["Top"] = value;
@@ -37,10 +37,10 @@ namespace AnyfinCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Left {
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int Left {
             get {
-                return ((string)(this["Left"]));
+                return ((int)(this["Left"]));
             }
             set {
                 this["Left"] = value;
@@ -49,10 +49,10 @@ namespace AnyfinCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Scale {
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double Scale {
             get {
-                return ((string)(this["Scale"]));
+                return ((double)(this["Scale"]));
             }
             set {
                 this["Scale"] = value;
@@ -61,13 +61,37 @@ namespace AnyfinCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Opacity {
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public double Opacity {
             get {
-                return ((string)(this["Opacity"]));
+                return ((double)(this["Opacity"]));
             }
             set {
                 this["Opacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int MaxLeft {
+            get {
+                return ((int)(this["MaxLeft"]));
+            }
+            set {
+                this["MaxLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int MaxTop {
+            get {
+                return ((int)(this["MaxTop"]));
+            }
+            set {
+                this["MaxTop"] = value;
             }
         }
     }
