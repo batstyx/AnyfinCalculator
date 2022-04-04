@@ -111,9 +111,25 @@
                 <Setter Property="MinWidth" Value="410" />
                 <Setter Property="IsExpanded" Value="True" />
             </Style>
+            <Style x:Key="ToggleStyle" TargetType="mah:ToggleSwitch">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Margin" Value="10,0"/>
+            </Style>
         </ResourceDictionary>
     </Grid.Resources>
-    <GroupBox Header="{lex:Loc LayoutTitle}">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
+        <RowDefinition />
+    </Grid.RowDefinitions>
+    <GroupBox Header="{lex:Loc StyleTitle}">
+        <mah:ToggleSwitch
+            Style="{StaticResource ToggleStyle}"
+            IsChecked="{Binding DisplayClassic, Source={x:Static properties:Settings.Default}}"
+            OffLabel="{lex:Loc DisplayClassicOff}"
+            OnLabel="{lex:Loc DisplayClassicOn}" />
+    </GroupBox>
+    <GroupBox Grid.Row="1" Header="{lex:Loc LayoutTitle}">
         <StackPanel Width="400">
             <GroupBox Header="{lex:Loc PositionTitle}" Style="{StaticResource PositionGroupStyle}">
                 <StackPanel>
@@ -166,8 +182,8 @@
                     <DockPanel Style="{StaticResource SliderPanelStyle}">
                         <Slider
                             x:Name="SliderOpacity"
-                            Style="{StaticResource OpacitySliderStyle}"
                             DockPanel.Dock="Right"
+                            Style="{StaticResource OpacitySliderStyle}"
                             Value="{Binding Opacity, Source={x:Static properties:Settings.Default}}" />
                         <Label
                             VerticalAlignment="Center"

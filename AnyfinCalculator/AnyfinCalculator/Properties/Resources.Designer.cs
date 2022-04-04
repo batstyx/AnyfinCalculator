@@ -61,6 +61,33 @@ namespace AnyfinCalculator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Graphic Counter.
+        /// </summary>
+        public static string DisplayClassicOff {
+            get {
+                return ResourceManager.GetString("DisplayClassicOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classic Card Tooltip.
+        /// </summary>
+        public static string DisplayClassicOn {
+            get {
+                return ResourceManager.GetString("DisplayClassicOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Type.
+        /// </summary>
+        public static string DisplayClassicTitle {
+            get {
+                return ResourceManager.GetString("DisplayClassicTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset to Default.
         /// </summary>
         public static string DisplayResetButton {
@@ -210,6 +237,15 @@ namespace AnyfinCalculator.Properties {
         public static string SettingsVerticalTooltip {
             get {
                 return ResourceManager.GetString("SettingsVerticalTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Style.
+        /// </summary>
+        public static string StyleTitle {
+            get {
+                return ResourceManager.GetString("StyleTitle", resourceCulture);
             }
         }
     }

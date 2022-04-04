@@ -33,12 +33,12 @@ namespace AnyfinCalculator
 
         private void ButtonResetPosition_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            Settings.Default.ResetPosition();
         }
 
         private void ButtonResetDisplay_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            Settings.Default.ResetDisplay();
         }
     }
 }

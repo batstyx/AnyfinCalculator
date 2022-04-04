@@ -94,5 +94,17 @@ namespace AnyfinCalculator.Properties {
                 this["MaxTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ClassicMode {
+            get {
+                return ((bool)(this["ClassicMode"]));
+            }
+            set {
+                this["ClassicMode"] = value;
+            }
+        }
     }
 }

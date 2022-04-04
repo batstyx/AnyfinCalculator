@@ -21,8 +21,9 @@ namespace AnyfinCalculator
 {
 	public class AnyfinPlugin : IPlugin
 	{
+		private Settings Settings;
+
 		private DamageCalculator _calculator;
-		private AnyfinConfig _config;
 		private HearthstoneTextBlock _displayBlock;
 		private AnyfinDisplay _display;
 		//todo: this
@@ -34,10 +35,11 @@ namespace AnyfinCalculator
 
 		public void OnLoad()
 		{
+			Settings = Settings.Default;
+
 			_displayBlock = new HearthstoneTextBlock { FontSize = 36, Visibility = Visibility.Collapsed };
 			_calculator = new DamageCalculator();
-			ConfigHandler();
-			_display = new AnyfinDisplay(_config) { Visibility = Visibility.Collapsed };
+			_display = new AnyfinDisplay(Settings) { Visibility = Visibility.Collapsed };
 			//_toolTip = new CardToolTip();
 			_toolTipsPanel = new StackPanel();
 
@@ -113,6 +115,10 @@ namespace AnyfinCalculator
 
 		public void OnUnload()
 		{
+			MainMenuItem = null;
+
+			if (Settings?.HasChanges ?? false) Settings.Save();
+			Settings = null;
 		}
 
 		public void OnUpdate()
@@ -135,28 +141,6 @@ namespace AnyfinCalculator
 		public string Author => "ericBG";
 		public Version Version => LibraryInfo.Version;
 
-		private void ConfigHandler()
-		{
-			if (File.Exists(AnyfinConfig.ConfigLocation))
-			{
-				using (var fs = File.OpenRead(AnyfinConfig.ConfigLocation))
-				using (var r = XmlReader.Create(fs))
-				{
-					var x = new XmlSerializer(typeof(AnyfinConfig));
-					if (!x.CanDeserialize(r)) _config = new AnyfinConfig();
-					else _config = (AnyfinConfig)x.Deserialize(r);
-				}
-			}
-			else
-			{
-				using (var fs = File.OpenWrite(AnyfinConfig.ConfigLocation))
-				{
-					var x = new XmlSerializer(typeof(AnyfinConfig));
-					x.Serialize(fs, (_config = new AnyfinConfig()));
-				}
-			}
-		}
-
 		#region Classic Mode
 
 		private void OnMouseOff()
@@ -176,7 +160,7 @@ namespace AnyfinCalculator
 
 		private void OnMouseOver(Card card)
 		{
-			if (!card.IsAnyfin() || !_config.ClassicMode) return;
+			if (!card.IsAnyfin() || !Settings.Default.ClassicMode) return;
 			Log.Debug("Anyfin hover detected");
 			var damageDealt = _calculator.CalculateDamageDealt();
 			var friendlyText = damageDealt.Minimum == damageDealt.Maximum ? "" : "between ";
