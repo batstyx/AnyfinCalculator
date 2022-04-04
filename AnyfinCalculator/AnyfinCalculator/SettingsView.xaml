@@ -1,0 +1,222 @@
+﻿<Grid
+    x:Class="AnyfinCalculator.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hdtc="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:local="clr-namespace:AnyfinCalculator"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:AnyfinCalculator.Properties"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    lex:LocalizeDictionary.DesignCulture="en"
+    lex:ResxLocalizationProvider.DefaultAssembly="AnyfinCalculator"
+    lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+    mc:Ignorable="d">
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="Brown" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <Grid.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontWeight" Value="bold" />
+                <Setter Property="Margin" Value="10,20,10,5" />
+            </Style>
+            <Style x:Key="DescStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="10,0" />
+            </Style>
+            <Style x:Key="DockPanelStyle" TargetType="DockPanel">
+                <Setter Property="Margin" Value="5,5,5,0" />
+            </Style>
+            <Style
+                x:Key="ComboBoxStyle"
+                BasedOn="{StaticResource MetroComboBox}"
+                TargetType="ComboBox">
+                <Setter Property="Margin" Value="5,0,0,0" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Width" Value="150" />
+            </Style>
+            <Style x:Key="SliderPanelStyle" TargetType="DockPanel">
+                <Setter Property="Margin" Value="10,0,5,0" />
+            </Style>
+            <Style
+                x:Key="PositionGroupStyle"
+                BasedOn="{StaticResource MetroGroupBox}"
+                TargetType="GroupBox">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            <Style
+                x:Key="SliderStyle"
+                BasedOn="{StaticResource MetroSlider}"
+                TargetType="Slider">
+                <Setter Property="IsSnapToTickEnabled" Value="True" />
+                <Setter Property="TickFrequency" Value="1" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Width" Value="150" />
+            </Style>
+            <Style
+                x:Key="OpacitySliderStyle"
+                BasedOn="{StaticResource SliderStyle}"
+                TargetType="Slider">
+                <Setter Property="LargeChange" Value="10" />
+                <Setter Property="Minimum" Value="20" />
+                <Setter Property="Maximum" Value="100" />
+            </Style>
+            <Style
+                x:Key="ScaleSliderStyle"
+                BasedOn="{StaticResource SliderStyle}"
+                TargetType="Slider">
+                <Setter Property="LargeChange" Value="10" />
+                <Setter Property="Minimum" Value="50" />
+                <Setter Property="Maximum" Value="200" />
+            </Style>
+            <Style x:Key="SliderTextStyle" TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="TextAlignment" Value="Right" />
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Margin" Value="0,0,10,0" />
+            </Style>
+            <Style x:Key="ResetToDefaultSeparatorStyle" TargetType="Separator">
+                <Setter Property="Height" Value="10" />
+            </Style>
+            <Style
+                x:Key="ResetToDefaultButtonStyle"
+                BasedOn="{StaticResource MetroButton}"
+                TargetType="Button">
+                <Setter Property="Width" Value="150" />
+                <Setter Property="Height" Value="10" />
+            </Style>
+            <Style
+                x:Key="ListViewStyle"
+                BasedOn="{StaticResource MetroListView}"
+                TargetType="ListView">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            <Style
+                x:Key="ExpanderStyle"
+                BasedOn="{StaticResource MetroExpander}"
+                TargetType="Expander">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="MinWidth" Value="410" />
+                <Setter Property="IsExpanded" Value="True" />
+            </Style>
+            <Style x:Key="ToggleStyle" TargetType="mah:ToggleSwitch">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Margin" Value="10,0"/>
+            </Style>
+        </ResourceDictionary>
+    </Grid.Resources>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
+        <RowDefinition />
+    </Grid.RowDefinitions>
+    <GroupBox Header="{lex:Loc StyleTitle}">
+        <mah:ToggleSwitch
+            Style="{StaticResource ToggleStyle}"
+            IsChecked="{Binding DisplayClassic, Source={x:Static properties:Settings.Default}}"
+            OffLabel="{lex:Loc DisplayClassicOff}"
+            OnLabel="{lex:Loc DisplayClassicOn}" />
+    </GroupBox>
+    <GroupBox Grid.Row="1" Header="{lex:Loc LayoutTitle}">
+        <StackPanel Width="400">
+            <GroupBox Header="{lex:Loc PositionTitle}" Style="{StaticResource PositionGroupStyle}">
+                <StackPanel>
+                    <DockPanel Style="{StaticResource SliderPanelStyle}">
+                        <Slider
+                            x:Name="SliderLeft"
+                            DockPanel.Dock="Right"
+                            Maximum="{Binding MaxLeft, Source={x:Static properties:Settings.Default}}"
+                            Style="{StaticResource SliderStyle}"
+                            ToolTip="{lex:Loc SettingsHorizontalTooltip}"
+                            Value="{Binding Left, Source={x:Static properties:Settings.Default}}" />
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{lex:Loc SettingsHorizontal}"
+                            DockPanel.Dock="Left"
+                            ToolTip="{lex:Loc SettingsHorizontalTooltip}" />
+                        <TextBlock
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource SliderTextStyle}"
+                            Text="{Binding Left, Source={x:Static properties:Settings.Default}, StringFormat={}{0}%}" />
+                    </DockPanel>
+                    <DockPanel Style="{StaticResource SliderPanelStyle}">
+                        <Slider
+                            x:Name="SliderTop"
+                            DockPanel.Dock="Right"
+                            Maximum="{Binding MaxTop, Source={x:Static properties:Settings.Default}}"
+                            Style="{StaticResource SliderStyle}"
+                            ToolTip="{lex:Loc SettingsVerticalTooltip}"
+                            Value="{Binding Top, Source={x:Static properties:Settings.Default}}" />
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{lex:Loc SettingsVertical}"
+                            DockPanel.Dock="Left"
+                            ToolTip="{lex:Loc SettingsVerticalTooltip}" />
+                        <TextBlock
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource SliderTextStyle}"
+                            Text="{Binding Top, Source={x:Static properties:Settings.Default}, StringFormat={}{0}%}" />
+                    </DockPanel>
+                    <Separator Style="{StaticResource ResetToDefaultSeparatorStyle}" />
+                    <Button
+                        Name="ButtonResetPosition"
+                        Click="ButtonResetPosition_Click"
+                        Content="{lex:Loc PositionResetButton}"
+                        Style="{StaticResource ResetToDefaultButtonStyle}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="{lex:Loc DisplayTitle}" Style="{StaticResource PositionGroupStyle}">
+                <StackPanel>
+                    <DockPanel Style="{StaticResource SliderPanelStyle}">
+                        <Slider
+                            x:Name="SliderOpacity"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource OpacitySliderStyle}"
+                            Value="{Binding Opacity, Source={x:Static properties:Settings.Default}}" />
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{lex:Loc SettingsOpacity}"
+                            DockPanel.Dock="Left" />
+                        <TextBlock
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource SliderTextStyle}"
+                            Text="{Binding Opacity, Source={x:Static properties:Settings.Default}, StringFormat={}{0}%}" />
+                    </DockPanel>
+                    <DockPanel Style="{StaticResource SliderPanelStyle}">
+                        <Slider
+                            x:Name="SliderScale"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource ScaleSliderStyle}"
+                            Value="{Binding Scale, Source={x:Static properties:Settings.Default}}" />
+                        <Label
+                            VerticalAlignment="Center"
+                            Content="{lex:Loc SettingsScale}"
+                            DockPanel.Dock="Left" />
+                        <TextBlock
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource SliderTextStyle}"
+                            Text="{Binding Scale, Source={x:Static properties:Settings.Default}, StringFormat={}{0}%}" />
+                    </DockPanel>
+                    <Separator Style="{StaticResource ResetToDefaultSeparatorStyle}" />
+                    <Button
+                        Name="ButtonResetDisplay"
+                        Click="ButtonResetDisplay_Click"
+                        Content="{lex:Loc DisplayResetButton}"
+                        Style="{StaticResource ResetToDefaultButtonStyle}" />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </GroupBox>
+</Grid>

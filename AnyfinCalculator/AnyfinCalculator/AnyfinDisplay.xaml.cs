@@ -1,29 +1,58 @@
-﻿using System.ComponentModel;
+﻿using AnyfinCalculator.Annotations;
+using AnyfinCalculator.Properties;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using AnyfinCalculator.Annotations;
-using Hearthstone_Deck_Tracker;
+using System.Windows.Media;
 using Core = Hearthstone_Deck_Tracker.API.Core;
 
 namespace AnyfinCalculator
 {
-	/// <summary>
-	///     Interaction logic for AnyfinDisplay.xaml
-	/// </summary>
-	public partial class AnyfinDisplay : INotifyPropertyChanged
+    /// <summary>
+    ///     Interaction logic for AnyfinDisplay.xaml
+    /// </summary>
+    public partial class AnyfinDisplay : INotifyPropertyChanged
 	{
-		private readonly AnyfinConfig _config;
-		private string _damageText;
-
-		public AnyfinDisplay(AnyfinConfig config)
+        private readonly Settings Settings;
+		
+		public AnyfinDisplay(Settings settings)
 		{
 			InitializeComponent();
-			_config = config;
-			_config.PropertyChanged += ConfigSizeChanged;
-			ConfigSizeChanged(this, null);
+			
+			Settings = settings;
+			SetTop();
+			SetLeft();
+			SetScale();
+			SetOpacity();
+
+			Settings.PropertyChanged += SettingChanged;
 		}
 
-		private double ScreenRatio => (4.0/3.0)/(Core.OverlayCanvas.Width/Core.OverlayCanvas.Height);
+		private void SetLeft() => Canvas.SetLeft(this, Core.OverlayWindow.Width * Settings.Left / 100);
+		private void SetTop() => Canvas.SetTop(this, Core.OverlayWindow.Height * Settings.Top / 100);
+		private void SetScale() => RenderTransform = new ScaleTransform(Settings.Scale / 100, Settings.Scale / 100);
+		private void SetOpacity() => Opacity = Settings.Opacity / 100;
+
+		private void SettingChanged(object sender, PropertyChangedEventArgs e)
+		{
+			switch (e.PropertyName)
+			{
+				case "Top":
+					SetTop();
+					break;
+				case "Left":
+					SetLeft();
+					break;
+				case "Scale":
+					SetScale();
+					break;
+				case "Opacity":
+					SetOpacity();
+					break;
+				default:
+					break;
+			}
+		}
 
 		public string DamageText
 		{
@@ -35,23 +64,9 @@ namespace AnyfinCalculator
 				OnPropertyChanged();
 			}
 		}
+		private string _damageText;
 
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void ConfigSizeChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e?.PropertyName == "IconX" || ReferenceEquals(sender, this))
-				if (_config.XFromRight)
-					Canvas.SetRight(this, Helper.GetScaledXPos(_config.IconX / 100, (int)Core.OverlayCanvas.Width, ScreenRatio));
-				else
-					Canvas.SetLeft(this, Helper.GetScaledXPos(_config.IconX / 100, (int)Core.OverlayCanvas.Width, ScreenRatio));
-
-			if (e?.PropertyName == "IconY" || ReferenceEquals(sender, this))
-				if(_config.YFromBottom)
-					Canvas.SetBottom(this, Core.OverlayCanvas.Height * (_config.IconY / 100));
-				else
-					Canvas.SetTop(this, Core.OverlayCanvas.Height*(_config.IconY/100));
-		}
 
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

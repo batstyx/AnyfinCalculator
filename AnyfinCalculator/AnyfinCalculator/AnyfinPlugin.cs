@@ -15,13 +15,15 @@ using MahApps.Metro.Controls.Dialogs;
 using Card = Hearthstone_Deck_Tracker.Hearthstone.Card;
 using Core = Hearthstone_Deck_Tracker.API.Core;
 using System.Threading.Tasks;
+using AnyfinCalculator.Properties;
 
 namespace AnyfinCalculator
 {
 	public class AnyfinPlugin : IPlugin
 	{
+		private Settings Settings;
+
 		private DamageCalculator _calculator;
-		private AnyfinConfig _config;
 		private HearthstoneTextBlock _displayBlock;
 		private AnyfinDisplay _display;
 		//todo: this
@@ -29,21 +31,28 @@ namespace AnyfinCalculator
 		private StackPanel _toolTipsPanel;
 		private bool _inAnyfinGame;
 
-		protected MenuItem mainMenuItem { get; set; }
+		protected MenuItem MainMenuItem { get; set; }
 
 		public void OnLoad()
 		{
+			Settings = Settings.Default;
+
 			_displayBlock = new HearthstoneTextBlock { FontSize = 36, Visibility = Visibility.Collapsed };
 			_calculator = new DamageCalculator();
-			ConfigHandler();
-			_display = new AnyfinDisplay(_config) { Visibility = Visibility.Collapsed };
+			_display = new AnyfinDisplay(Settings) { Visibility = Visibility.Collapsed };
 			//_toolTip = new CardToolTip();
 			_toolTipsPanel = new StackPanel();
 
 			// Create main menu item
-			mainMenuItem = new MenuItem();
-			mainMenuItem.Header = "Calculate Board";
-			mainMenuItem.Click += new RoutedEventHandler(ForceUpdateClick);
+			MainMenuItem = new MenuItem {  Header = Strings.Get("MenuTitle") };
+			
+			var calcMenuItem = new MenuItem { Header = Strings.Get("MenuCalculate") };
+			calcMenuItem.Click += new RoutedEventHandler(ForceUpdateClick);
+			MainMenuItem.Items.Add(calcMenuItem);
+
+			var settingsMenuItem = new MenuItem { Header = Strings.Get("MenuSettings") };
+			settingsMenuItem.Click += (sender, args) => OnButtonPress();
+			MainMenuItem.Items.Add(settingsMenuItem);
 
 			GameEvents.OnPlayerHandMouseOver.Add(OnMouseOver);
 			GameEvents.OnMouseOverOff.Add(OnMouseOff);
@@ -102,11 +111,14 @@ namespace AnyfinCalculator
 
 		#endregion
 
-		public async void OnButtonPress()
-			=> await Core.MainWindow.ShowMessageAsync("Warning", "There is currently no options for this plugin.");
+		public void OnButtonPress() => SettingsView.Flyout.IsOpen = true;
 
 		public void OnUnload()
 		{
+			MainMenuItem = null;
+
+			if (Settings?.HasChanges ?? false) Settings.Save();
+			Settings = null;
 		}
 
 		public void OnUpdate()
@@ -122,34 +134,12 @@ namespace AnyfinCalculator
 
 		public MenuItem MenuItem
 		{
-			get { return mainMenuItem; }
+			get { return MainMenuItem; }
 		}
 
-		public string ButtonText => "Options";
+		public string ButtonText => Strings.Get("PluginButton");
 		public string Author => "ericBG";
-		public Version Version => new Version(1, 0, 6);
-
-		private void ConfigHandler()
-		{
-			if (File.Exists(AnyfinConfig.ConfigLocation))
-			{
-				using (var fs = File.OpenRead(AnyfinConfig.ConfigLocation))
-				using (var r = XmlReader.Create(fs))
-				{
-					var x = new XmlSerializer(typeof(AnyfinConfig));
-					if (!x.CanDeserialize(r)) _config = new AnyfinConfig();
-					else _config = (AnyfinConfig)x.Deserialize(r);
-				}
-			}
-			else
-			{
-				using (var fs = File.OpenWrite(AnyfinConfig.ConfigLocation))
-				{
-					var x = new XmlSerializer(typeof(AnyfinConfig));
-					x.Serialize(fs, (_config = new AnyfinConfig()));
-				}
-			}
-		}
+		public Version Version => LibraryInfo.Version;
 
 		#region Classic Mode
 
@@ -170,7 +160,7 @@ namespace AnyfinCalculator
 
 		private void OnMouseOver(Card card)
 		{
-			if (!card.IsAnyfin() || !_config.ClassicMode) return;
+			if (!card.IsAnyfin() || !Settings.Default.ClassicMode) return;
 			Log.Debug("Anyfin hover detected");
 			var damageDealt = _calculator.CalculateDamageDealt();
 			var friendlyText = damageDealt.Minimum == damageDealt.Maximum ? "" : "between ";
