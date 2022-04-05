@@ -9,7 +9,7 @@ Param(
 $versionPattern = '(?<major>\d+)\.(?<minor>\d+)(\.(?<patch>\d+))?(\.(?<build>\d+))?'
 
 $solutionPath = $(Resolve-Path "$PSScriptRoot\..").Path
-$assemblyInfoFile = "$solutionPath\$project\$project\Properties\AssemblyInfo.cs"
+$assemblyInfoFile = "$solutionPath\$project\Properties\AssemblyInfo.cs"
 
 $assemblyInfo = [IO.File]::ReadAllText($assemblyInfoFile)
 $versionRegex = [System.Text.RegularExpressions.Regex]::new('Version\(\"' + $versionPattern + '\"\)')
