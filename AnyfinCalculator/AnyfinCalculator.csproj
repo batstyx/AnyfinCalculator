@@ -53,10 +53,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HearthDb">
-      <HintPath>..\..\lib\HearthDb.dll</HintPath>
+      <HintPath>..\lib\HearthDb.dll</HintPath>
     </Reference>
     <Reference Include="HearthstoneDeckTracker">
-      <HintPath>..\..\lib\HearthstoneDeckTracker.exe</HintPath>
+      <HintPath>..\lib\HearthstoneDeckTracker.exe</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
