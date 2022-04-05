@@ -31,6 +31,13 @@ namespace AnyfinCalculator
 		private StackPanel _toolTipsPanel;
 		private bool _inAnyfinGame;
 
+		internal bool DeckHasAnyfin => DeckList.Instance?.ActiveDeck.Cards.Contains(Murlocs.AnyfinCanHappen) ?? false;
+		internal bool IsInvalidMatch => Core.Game.IsBattlegroundsMatch || Core.Game.IsMercenariesMatch;
+		internal bool HideInMenu => Core.Game.IsInMenu && Config.Instance.HideInMenu;
+
+		private Visibility Visibility => HideInMenu || IsInvalidMatch
+			? Visibility.Collapsed : Visibility.Visible;
+
 		protected MenuItem MainMenuItem { get; set; }
 
 		public void OnLoad()
@@ -65,8 +72,6 @@ namespace AnyfinCalculator
 			DeckManagerEvents.OnDeckSelected.Add(OnGameStart);
 			GameEvents.OnTurnStart.Add(OnTurnStart);
 			Core.OverlayCanvas.Children.Add(_display);
-			if (!Core.Game.IsInMenu)
-			OnGameStart();
 		}
 
 		#region New Mode
@@ -74,16 +79,14 @@ namespace AnyfinCalculator
 		private void OnGameEnd()
 		{
 			_inAnyfinGame = false;
-			_display.Visibility = Visibility.Collapsed;
 		}
 
 		private void OnGameStart(Deck obj) => OnGameStart();
 
 		private void OnGameStart()
 		{
-			if (!(DeckList.Instance?.ActiveDeck.Cards.Contains(Murlocs.AnyfinCanHappen) ?? false)) return;
-			_inAnyfinGame = true;
-			UpdateDisplay(null);
+			if (IsInvalidMatch) return;
+			_inAnyfinGame = DeckHasAnyfin;
 		}
 
 		private void ForceUpdateClick(object o, RoutedEventArgs a)
@@ -105,8 +108,6 @@ namespace AnyfinCalculator
 
 			Range<int> range = _calculator.CalculateDamageDealt();
 			_display.DamageText = $"{range.Minimum}\n{range.Maximum}";
-			if (_display.Visibility == Visibility.Collapsed)
-				_display.Visibility = _calculator.DeadMurlocs.Any() ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		#endregion
@@ -117,12 +118,18 @@ namespace AnyfinCalculator
 		{
 			MainMenuItem = null;
 
+			_display = null;
+
 			if (Settings?.HasChanges ?? false) Settings.Save();
 			Settings = null;
 		}
 
 		public void OnUpdate()
 		{
+            if (_display != null)
+            {
+				_display.Visibility = Visibility;
+			}			
 		}
 
 		public string Name => "Anyfin Can Happen Calculator";
