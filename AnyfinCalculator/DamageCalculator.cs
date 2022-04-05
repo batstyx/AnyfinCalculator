@@ -12,7 +12,7 @@ namespace AnyfinCalculator
 {
 	public class DamageCalculator
 	{
-		private readonly GraveyardHelper _helper = new GraveyardHelper(c => c.Race == "Murloc");
+		private readonly GraveyardHelper _helper = new GraveyardHelper(c => c.IsMurloc());
 
 		public IEnumerable<Card> DeadMurlocs => _helper.TrackedMinions.ToList();
 
