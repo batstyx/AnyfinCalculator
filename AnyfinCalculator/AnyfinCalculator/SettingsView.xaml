@@ -112,8 +112,8 @@
                 <Setter Property="IsExpanded" Value="True" />
             </Style>
             <Style x:Key="ToggleStyle" TargetType="mah:ToggleSwitch">
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Margin" Value="10,0"/>
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="10,0" />
             </Style>
         </ResourceDictionary>
     </Grid.Resources>
@@ -122,12 +122,12 @@
         <RowDefinition Height="auto" />
         <RowDefinition />
     </Grid.RowDefinitions>
-    <GroupBox Header="{lex:Loc StyleTitle}">
+    <GroupBox Header="{lex:Loc StyleTitle}" Visibility="Collapsed">
         <mah:ToggleSwitch
-            Style="{StaticResource ToggleStyle}"
             IsChecked="{Binding DisplayClassic, Source={x:Static properties:Settings.Default}}"
             OffLabel="{lex:Loc DisplayClassicOff}"
-            OnLabel="{lex:Loc DisplayClassicOn}" />
+            OnLabel="{lex:Loc DisplayClassicOn}"
+            Style="{StaticResource ToggleStyle}" />
     </GroupBox>
     <GroupBox Grid.Row="1" Header="{lex:Loc LayoutTitle}">
         <StackPanel Width="400">
