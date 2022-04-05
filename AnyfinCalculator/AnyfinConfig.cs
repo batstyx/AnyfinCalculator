@@ -7,7 +7,7 @@ using Hearthstone_Deck_Tracker;
 
 namespace AnyfinCalculator
 {
-	[Serializable]
+	[Serializable, Obsolete("Use Properties.Settings.Default")]
 	public class AnyfinConfig : INotifyPropertyChanged
 	{
 		[NonSerialized] public static readonly string ConfigLocation = Path.Combine(Config.Instance.DataDir,
