@@ -118,6 +118,7 @@ namespace AnyfinCalculator
 		{
 			MainMenuItem = null;
 
+			Core.OverlayCanvas.Children.Remove(_display);
 			_display = null;
 
 			if (Settings?.HasChanges ?? false) Settings.Save();
