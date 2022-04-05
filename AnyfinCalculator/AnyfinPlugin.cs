@@ -23,20 +23,20 @@ namespace AnyfinCalculator
 	{
 		private Settings Settings;
 
-		private DamageCalculator _calculator;
+		private DamageCalculator Calculator;
 		private HearthstoneTextBlock _displayBlock;
-		private AnyfinDisplay _display;
+		private AnyfinDisplay Display;
 		//todo: this
 		//private CardToolTip _toolTip;
 		private StackPanel _toolTipsPanel;
-		private bool _inAnyfinGame;
+		private bool InAnyfinGame;
 
 		internal bool DeckHasAnyfin => DeckList.Instance?.ActiveDeck.Cards.Contains(Murlocs.AnyfinCanHappen) ?? false;
 		internal bool IsInvalidMatch => Core.Game.IsBattlegroundsMatch || Core.Game.IsMercenariesMatch;
-		internal bool HideInMenu => Core.Game.IsInMenu && Config.Instance.HideInMenu;
+		internal bool ShowInMenu => Core.Game.IsInMenu && !Config.Instance.HideInMenu;
 
-		private Visibility Visibility => HideInMenu || IsInvalidMatch
-			? Visibility.Collapsed : Visibility.Visible;
+		private Visibility Visibility => ShowInMenu || InAnyfinGame
+			? Visibility.Visible : Visibility.Collapsed;
 
 		protected MenuItem MainMenuItem { get; set; }
 
@@ -45,8 +45,8 @@ namespace AnyfinCalculator
 			Settings = Settings.Default;
 
 			_displayBlock = new HearthstoneTextBlock { FontSize = 36, Visibility = Visibility.Collapsed };
-			_calculator = new DamageCalculator();
-			_display = new AnyfinDisplay(Settings) { Visibility = Visibility.Collapsed };
+			Calculator = new DamageCalculator();
+			Display = new AnyfinDisplay(Settings) { Visibility = Visibility.Collapsed };
 			//_toolTip = new CardToolTip();
 			_toolTipsPanel = new StackPanel();
 
@@ -71,14 +71,14 @@ namespace AnyfinCalculator
 			GameEvents.OnOpponentPlay.Add(UpdateDisplay);
 			DeckManagerEvents.OnDeckSelected.Add(OnGameStart);
 			GameEvents.OnTurnStart.Add(OnTurnStart);
-			Core.OverlayCanvas.Children.Add(_display);
+			Core.OverlayCanvas.Children.Add(Display);
 		}
 
 		#region New Mode
 
 		private void OnGameEnd()
 		{
-			_inAnyfinGame = false;
+			InAnyfinGame = false;
 		}
 
 		private void OnGameStart(Deck obj) => OnGameStart();
@@ -86,7 +86,7 @@ namespace AnyfinCalculator
 		private void OnGameStart()
 		{
 			if (IsInvalidMatch) return;
-			_inAnyfinGame = DeckHasAnyfin;
+			InAnyfinGame = DeckHasAnyfin;
 		}
 
 		private void ForceUpdateClick(object o, RoutedEventArgs a)
@@ -99,15 +99,18 @@ namespace AnyfinCalculator
 			UpdateDisplay(null);
 		}
 
+		private bool Updating = false;
 		private async void UpdateDisplay(Card c)
-		{
-			if (!_inAnyfinGame) return;
+		{			
+			if (!InAnyfinGame || Updating) return;
+			Updating = true;
 
 			// Temporary fix for race condition where the GameTags on the played card haven't been updated yet.
 			await Task.Delay(200);
 
-			Range<int> range = _calculator.CalculateDamageDealt();
-			_display.DamageText = $"{range.Minimum}\n{range.Maximum}";
+			Range<int> range = Calculator.CalculateDamageDealt();
+			Display.DamageText = $"{range.Minimum}\n{range.Maximum}";
+			Updating = false;
 		}
 
 		#endregion
@@ -118,8 +121,8 @@ namespace AnyfinCalculator
 		{
 			MainMenuItem = null;
 
-			Core.OverlayCanvas.Children.Remove(_display);
-			_display = null;
+			Core.OverlayCanvas.Children.Remove(Display);
+			Display = null;
 
 			if (Settings?.HasChanges ?? false) Settings.Save();
 			Settings = null;
@@ -127,9 +130,9 @@ namespace AnyfinCalculator
 
 		public void OnUpdate()
 		{
-            if (_display != null)
+            if (Display != null)
             {
-				_display.Visibility = Visibility;
+				Display.Visibility = Visibility;
 			}			
 		}
 
@@ -170,7 +173,7 @@ namespace AnyfinCalculator
 		{
 			if (!card.IsAnyfin() || !Settings.Default.ClassicMode) return;
 			Log.Debug("Anyfin hover detected");
-			var damageDealt = _calculator.CalculateDamageDealt();
+			var damageDealt = Calculator.CalculateDamageDealt();
 			var friendlyText = damageDealt.Minimum == damageDealt.Maximum ? "" : "between ";
 			PlaceTextboxWithText($"Anyfin can deal {friendlyText}{damageDealt}");
 		}
