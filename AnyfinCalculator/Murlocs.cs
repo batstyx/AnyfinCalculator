@@ -11,7 +11,7 @@ namespace AnyfinCalculator
 		{
 			BluegillWarrior = Database.GetCardFromId(Collectible.Neutral.BluegillWarriorLegacy);
 			GrimscaleOracle = Database.GetCardFromId(Collectible.Neutral.GrimscaleOracleLegacy);
-			MurlocWarleader = Database.GetCardFromId(Collectible.Neutral.MurlocWarleader);
+			MurlocWarleader = Database.GetCardFromId(Collectible.Neutral.MurlocWarleaderExpert1);
 			OldMurkEye = Database.GetCardFromId(Collectible.Neutral.OldMurkEyeLegacy);
 			MurlocTidecaller = Database.GetCardFromId(Collectible.Neutral.MurlocTidecaller);
 			LushwaterScout = Database.GetCardFromId(Collectible.Neutral.LushwaterScout);
