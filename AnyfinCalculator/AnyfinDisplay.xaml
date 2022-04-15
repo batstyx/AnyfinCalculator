@@ -15,8 +15,8 @@
             Visibility="{Binding Visibility}" />
         <Grid Visibility="{Binding Visibility}">
             <TextBlock
-                Height="48"
-                Margin="65,26,20,26"
+                MinHeight="24"
+                Margin="60,26,15,26"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 FontFamily="/HearthstoneDeckTracker;component/Resources/#Chunkfive"

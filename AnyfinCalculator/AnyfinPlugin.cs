@@ -109,7 +109,7 @@ namespace AnyfinCalculator
 			await Task.Delay(200);
 
 			Range<int> range = Calculator.CalculateDamageDealt();
-			Display.DamageText = $"{range.Minimum}\n{range.Maximum}";
+			Display.DamageText = $"{range}";
 			Updating = false;
 		}
 
