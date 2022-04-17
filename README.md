@@ -1,5 +1,5 @@
 # AnyfinCalculator
-A calculator for Anyfin Can Happen, inbuilt to [Hearthstone Deck Tracker](https://github.com/Epix37/Hearthstone-Deck-Tracker/). 
+A calculator for [Anyfin Can Happen](https://playhearthstone.com/en-gb/cards/2898-anyfin-can-happen), inbuilt to [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker). 
 
 # So what exactly does this do?
 Whenever the card "Anyfin Can Happen" is hovered over in the player's hand, it will display a quick overview of how much damage it will/could inflict onto the opponent (just counting murloc damage). This takes into account the possibilites of murlocs being summoned, showing the possible range of damage. This would include murlocs on the board, but not other minions.
