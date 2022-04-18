@@ -48,6 +48,9 @@ namespace AnyfinCalculator
 		public static bool IsTidecaller(this Card card) => card.Id == MurlocTidecaller.Id;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsScout(this Card card) => card.Id == LushwaterScout.Id;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsAnyfin(this Card card) => card.Id == AnyfinCanHappen.Id;
 	}
 }

@@ -7,6 +7,8 @@ using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Hearthstone.Entities;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace AnyfinCalculator
 {
@@ -14,40 +16,36 @@ namespace AnyfinCalculator
 	{
 		private readonly GraveyardHelper _helper = new GraveyardHelper(c => c.IsMurloc());
 
-		public IEnumerable<Card> DeadMurlocs => _helper.TrackedMinions.ToList();
+		public IEnumerable<Card> DeadMurlocs => _helper.TrackedMinions;
 
 		public Range<int> CalculateDamageDealt()
 		{
+			var deadMurlocs = DeadMurlocs.ToList();
+			var board = Core.Game.Player.Board.Where(c => c.Card.IsMurloc()).ToList();
+			var opponent = Core.Game.Opponent.Board.Where(c => c.Card.IsMurloc()).ToList();
 			if (Core.Game.PlayerMinionCount >= 7) return new Range<int>() {Maximum = 0, Minimum = 0};
-			if (_helper.TrackedMinions.Count() + Core.Game.PlayerMinionCount <= 7)
+			if (deadMurlocs.Count() + Core.Game.PlayerMinionCount <= 7)
 			{
-				var damage = CalculateDamageInternal(_helper.TrackedMinions, Core.Game.Player.Board,
-					Core.Game.Opponent.Board);
+				var damage = CalculateDamageInternal(deadMurlocs, board, opponent);
 				return new Range<int> {Maximum = damage, Minimum = damage};
 			}
 
-			var sw = Stopwatch.StartNew();
-			var murlocs = _helper.TrackedMinions.ToList();
-			var board = Core.Game.Player.Board.ToList();
-			var opponent = Core.Game.Opponent.Board.ToList();
-			int? min = null, max = null;
-			foreach (var combination in Combinations(murlocs, 7 - Core.Game.PlayerMinionCount))
-			{
-				var damage = CalculateDamageInternal(combination, board, opponent);
-				if (damage > max || !max.HasValue) max = damage;
-				if (damage < min || !min.HasValue) min = damage;
-			}
+			var sw = Stopwatch.StartNew();		
+			var whatsTheDamage = new ConcurrentBag<int>();
+			var combinations = Combinations(deadMurlocs, 7 - Core.Game.PlayerMinionCount);
+			Parallel.ForEach(combinations, combination => whatsTheDamage.Add(CalculateDamageInternal(combination, board, opponent)));				
 			sw.Stop();
-			Log.Debug($"Time to calculate the possibilities: {sw.Elapsed.ToString("ss\\:fff")}");
-			return new Range<int> {Maximum = max.Value, Minimum = min.Value};
+			var damageRange = new Range<int> { Maximum = whatsTheDamage.Max(), Minimum = whatsTheDamage.Min() };
+			Log.Info($"Damage range {damageRange}. Time to calculate {whatsTheDamage.Count} possibilities: {sw.Elapsed:ss\\:fff}");
+			return damageRange;
 		}
 
 		private static int CalculateDamageInternal(IEnumerable<Card> graveyard, IEnumerable<Entity> friendlyBoard,
 			IEnumerable<Entity> opponentBoard)
 		{
-			var deadMurlocs = graveyard.ToList();
-			var aliveMurlocs = friendlyBoard.Where(c => c.Card.IsMurloc()).ToList();
-			var opponentMurlocs = opponentBoard.Where(c => c.Card.IsMurloc()).ToList();
+			var deadMurlocs = graveyard;
+			var aliveMurlocs = friendlyBoard;
+			var opponentMurlocs = opponentBoard;
 			//compiles together into one big freaking list
 			var murlocs =
 				deadMurlocs.Select(
@@ -94,32 +92,39 @@ namespace AnyfinCalculator
 
 			// Get the murlocs that will be summoned
 			var murlocsToBeSummoned = murlocs.Count(m => m.BoardState == MurlocInfo.State.Dead);
+			// Accumulative Lushwater Scout bonus
+			var murlocScoutBonus = 0;
 
 			// Go through each currently buffed murloc and remove the buffs
 			foreach (var murloc in murlocs.Where(t => t.AreBuffsApplied))
 			{
 				murloc.AreBuffsApplied = false;
-				murloc.Attack -= nonSilencedGrimscales + (nonSilencedWarleaders*2);
+				murloc.Attack -= nonSilencedGrimscales + (nonSilencedWarleaders*2) + murlocScoutBonus;
 				if (murloc.IsSilenced) continue;
 				if (murloc.Murloc.IsGrimscale()) murloc.Attack += 1;
 				if (murloc.Murloc.IsWarleader()) murloc.Attack += 2;
 				if (murloc.Murloc.IsMurkEye()) murloc.Attack -= (murlocs.Count(m => m.BoardState != MurlocInfo.State.Dead) - 1);
+				if (murloc.Murloc.IsScout()) murlocScoutBonus += 1;
 			}
 
 			// Add the now summoned buffers to the pool
 			nonSilencedWarleaders += murlocs.Count(m => m.BoardState == MurlocInfo.State.Dead && m.Murloc.IsWarleader());
 			nonSilencedGrimscales += murlocs.Count(m => m.BoardState == MurlocInfo.State.Dead && m.Murloc.IsGrimscale());
 
+			// Reset Lushwater Scout bonus
+			murlocScoutBonus = 0;
+
 			// Go through the murlocs on the board and apply all of the final buffs
 			foreach (var murloc in murlocs)
 			{
 				murloc.AreBuffsApplied = true;
-				murloc.Attack += nonSilencedGrimscales + (nonSilencedWarleaders*2);
+				murloc.Attack += nonSilencedGrimscales + (nonSilencedWarleaders*2) + murlocScoutBonus;
 				if (murloc.IsSilenced) continue;
 				if (murloc.Murloc.IsWarleader()) murloc.Attack -= 2;
 				if (murloc.Murloc.IsGrimscale()) murloc.Attack -= 1;
 				if (murloc.Murloc.IsMurkEye()) murloc.Attack += (murlocs.Count - 1);
 				if (murloc.Murloc.IsTidecaller()) murloc.Attack += murlocsToBeSummoned;
+				if (murloc.Murloc.IsScout()) murlocScoutBonus += 1;
 			}
 			Log.Debug(murlocs.Aggregate("",
 				(s, m) =>
