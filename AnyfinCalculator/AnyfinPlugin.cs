@@ -31,7 +31,7 @@ namespace AnyfinCalculator
 		private StackPanel _toolTipsPanel;
 		private bool InAnyfinGame;
 
-		internal bool DeckHasAnyfin => DeckList.Instance?.ActiveDeck.Cards.Contains(Murlocs.AnyfinCanHappen) ?? false;
+		internal bool DeckHasAnyfin => DeckList.Instance.ActiveDeck?.Cards.Contains(Murlocs.AnyfinCanHappen) ?? false;
 		internal bool IsInvalidMatch => Core.Game.IsBattlegroundsMatch || Core.Game.IsMercenariesMatch;
 		internal bool ShowInMenu => Core.Game.IsInMenu && !Config.Instance.HideInMenu;
 
