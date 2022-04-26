@@ -133,6 +133,10 @@ namespace AnyfinCalculator
             if (Display != null)
             {
 				Display.Visibility = Visibility;
+                if (Display.Visibility == Visibility.Visible)
+                {
+					Display.RefreshDisplay();
+                }
 			}			
 		}
 
