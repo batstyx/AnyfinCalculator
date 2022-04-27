@@ -7,7 +7,9 @@ using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Hearthstone.Entities;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("AnyfinTest")]
 namespace AnyfinCalculator
 {
 	public class DamageCalculator
@@ -42,7 +44,7 @@ namespace AnyfinCalculator
 			return new Range<int> {Maximum = max.Value, Minimum = min.Value};
 		}
 
-		private static int CalculateDamageInternal(IEnumerable<Card> graveyard, IEnumerable<Entity> friendlyBoard,
+		internal static int CalculateDamageInternal(IEnumerable<Card> graveyard, IEnumerable<Entity> friendlyBoard,
 			IEnumerable<Entity> opponentBoard)
 		{
 			var deadMurlocs = graveyard.ToList();
