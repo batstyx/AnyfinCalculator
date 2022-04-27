@@ -1,6 +1,6 @@
 [![Latest Release](https://img.shields.io/github/release-pre/batstyx/AnyfinCalculator.svg)](https://github.com/batstyx/AnyfinCalculator/releases)
 
-![Build Status](https://github.com/batstyx/AnyfinCalculator/actions/workflows/main.yml/badge.svg)
+[![Build Status](https://github.com/batstyx/AnyfinCalculator/actions/workflows/main.yml/badge.svg)](https://github.com/batstyx/AnyfinCalculator/actions/workflows/main.yml)
 
 # AnyfinCalculator
 A calculator for [Anyfin Can Happen](https://playhearthstone.com/en-gb/cards/2898-anyfin-can-happen), inbuilt to [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker). 
